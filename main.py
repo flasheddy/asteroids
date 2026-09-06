@@ -17,7 +17,7 @@ def main():
     # Initialize a player ship
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
-    player_ship = Player(x, y)
+    spaceship = Player(x, y)
 
     # Clock object for setting fps
     clock = pygame.time.Clock()
@@ -31,9 +31,12 @@ def main():
                 return
         screen.fill("black")
 
+        # Hook the update method in the game
+        spaceship.update(dt)
+
         # Draw a player ship after filling the screen with black
         # but before filpping the screen
-        player_ship.draw(screen)
+        spaceship.draw(screen)
 
         pygame.display.flip()
 
