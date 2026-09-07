@@ -14,6 +14,13 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    # Add groups to manage future objects
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Add Player to groups
+    Player.containers = (updatable, drawable)
+
     # Initialize a player ship
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
@@ -31,12 +38,15 @@ def main():
                 return
         screen.fill("black")
 
-        # Hook the update method in the game
-        spaceship.update(dt)
+        # Hook the update method in the game with group
+        updatable.update(dt)
 
-        # Draw a player ship after filling the screen with black
+        # Draw a player ship within drawable group
+        # after filling the screen with black
         # but before filpping the screen
-        spaceship.draw(screen)
+        # spaceship.draw(screen)
+        for obj in drawable:
+            obj.draw(screen)
 
         pygame.display.flip()
 
