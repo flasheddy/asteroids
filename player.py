@@ -21,7 +21,12 @@ class Player(CircleShape):
     # Draw the player ship
     def draw(self, screen: pygame.Surface) -> None:
         points = self.triangle()
-        pygame.draw.polygon(screen, "white", points, LINE_WIDTH)
+        pygame.draw.polygon(
+            screen,
+            "white",
+            points,
+            LINE_WIDTH,
+        )
 
     # Rotate the player ship
     def rotate(self, dt: float) -> None:
