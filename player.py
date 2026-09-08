@@ -1,13 +1,15 @@
+from typing import override
+
 import pygame
 
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED
+from constants import LINE_WIDTH, PLAYER_RADIUS, PLAYER_SPEED, PLAYER_TURN_SPEED
 
 
 class Player(CircleShape):
     def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
-        self.rotation = 0
+        self.rotation = 0  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # in the Player class
     def triangle(self) -> list[pygame.Vector2]:
@@ -19,9 +21,10 @@ class Player(CircleShape):
         return [a, b, c]
 
     # Draw the player ship
+    @override
     def draw(self, screen: pygame.Surface) -> None:
         points = self.triangle()
-        pygame.draw.polygon(
+        _ = pygame.draw.polygon(
             screen,
             "white",
             points,
@@ -37,9 +40,10 @@ class Player(CircleShape):
         unit_vector = pygame.Vector2(0, 1)
         rotated_vector = unit_vector.rotate(self.rotation)
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
-        self.position += rotated_with_speed_vector
+        self.position += rotated_with_speed_vector  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # Bind keys with rotation and movement
+    @override
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
 

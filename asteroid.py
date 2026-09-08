@@ -1,3 +1,5 @@
+from typing import override
+
 import pygame
 
 from circleshape import CircleShape
@@ -9,8 +11,9 @@ class Asteroid(CircleShape):
         super().__init__(x, y, radius)
 
     # Draw the asteroid
+    @override
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.circle(
+        _ = pygame.draw.circle(
             screen,
             "white",
             self.position,
@@ -19,5 +22,6 @@ class Asteroid(CircleShape):
         )
 
     # Make the asteroids moving
+    @override
     def update(self, dt: float) -> None:
-        self.position += self.velocity * dt
+        self.position += self.velocity * dt  # pyright: ignore[reportUnannotatedClassAttribute]

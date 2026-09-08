@@ -1,17 +1,26 @@
 import random
 from collections.abc import Callable
+from typing import Any, ClassVar, override
 
 import pygame
+
 from asteroid import Asteroid
-from constants import *
+from constants import (
+    ASTEROID_KINDS,
+    ASTEROID_MAX_RADIUS,
+    ASTEROID_MIN_RADIUS,
+    ASTEROID_SPAWN_RATE_SECONDS,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+)
 
 Edge = tuple[pygame.Vector2, Callable[[float], pygame.Vector2]]
 
 
 class AsteroidField(pygame.sprite.Sprite):
-    containers: pygame.sprite.Group
+    containers: ClassVar[tuple[pygame.sprite.Group[Any], ...]] = ()  # pyright: ignore[reportExplicitAny]
 
-    edges: list[Edge] = [
+    edges: ClassVar[tuple[Edge, ...]] = (
         (
             pygame.Vector2(1, 0),
             lambda y: pygame.Vector2(-ASTEROID_MAX_RADIUS, y * SCREEN_HEIGHT),
@@ -32,11 +41,11 @@ class AsteroidField(pygame.sprite.Sprite):
                 x * SCREEN_WIDTH, SCREEN_HEIGHT + ASTEROID_MAX_RADIUS
             ),
         ),
-    ]
+    )
 
     def __init__(self) -> None:
-        pygame.sprite.Sprite.__init__(self, self.containers)
-        self.spawn_timer = 0.0
+        pygame.sprite.Sprite.__init__(self, *self.containers)
+        self.spawn_timer: float = 0.0
 
     def spawn(
         self, radius: float, position: pygame.Vector2, velocity: pygame.Vector2
@@ -44,16 +53,16 @@ class AsteroidField(pygame.sprite.Sprite):
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
 
+    @override
     def update(self, dt: float) -> None:
         self.spawn_timer += dt
         if self.spawn_timer > ASTEROID_SPAWN_RATE_SECONDS:
-            self.spawn_timer = 0
+            self.spawn_timer = 0.0
 
-            # spawn a new asteroid at a random edge
-            edge = random.choice(self.edges)
-            speed = random.randint(40, 100)
-            velocity = edge[0] * speed
+            edge: Edge = random.choice(self.edges)
+            speed: int = random.randint(40, 100)
+            velocity: pygame.Vector2 = edge[0] * speed
             velocity = velocity.rotate(random.randint(-30, 30))
-            position = edge[1](random.uniform(0, 1))
-            kind = random.randint(1, ASTEROID_KINDS)
+            position: pygame.Vector2 = edge[1](random.uniform(0, 1))
+            kind: int = random.randint(1, ASTEROID_KINDS)
             self.spawn(ASTEROID_MIN_RADIUS * kind, position, velocity)

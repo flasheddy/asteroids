@@ -1,11 +1,10 @@
 import pygame
 
-from logger import log_state
-
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from logger import log_state
+from player import Player
 
 
 def main():
@@ -13,28 +12,28 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
-    pygame.init()
+    _ = pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     # Add groups to manage future objects
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
+    updatable = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
+    drawable = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
     # Add group to manage asteroids
-    asteroids = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
 
     # Set containers for Asteroid
     Asteroid.containers = (asteroids, updatable, drawable)
     # Set containers for AsteroidField
     AsteroidField.containers = (updatable,)
     # Initialize asteroid field
-    asteroid_field = AsteroidField()
+    _ = AsteroidField()
 
     # Set containers for Player
     Player.containers = (updatable, drawable)
     # Initialize a player ship
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
-    spaceship = Player(x, y)
+    _ = Player(x, y)
 
     # Clock object for setting fps
     clock = pygame.time.Clock()
@@ -46,7 +45,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill("black")
+        _ = screen.fill("black")
 
         # Hook the update method in the game with group
         updatable.update(dt)
@@ -55,8 +54,8 @@ def main():
         # after filling the screen with black
         # but before filpping the screen
         # spaceship.draw(screen)
-        for obj in drawable:
-            obj.draw(screen)
+        for obj in drawable:  # pyright: ignore[reportUnknownVariableType]
+            obj.draw(screen)  # pyright: ignore[reportUnknownMemberType]
 
         pygame.display.flip()
 
