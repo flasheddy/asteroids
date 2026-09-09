@@ -136,7 +136,7 @@ def log_state() -> None:
 def log_event(event_type: str, **details: object) -> None:
     global _event_log_initialized
 
-    now = datetime.now()  # noqa: DTZ005
+    now = datetime.now(UTC)
 
     event: dict[str, object] = {
         "timestamp": now.strftime("%H:%M:%S.%f")[:-3],

@@ -1,9 +1,11 @@
+import sys
+
 import pygame
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from logger import log_state
+from logger import log_event, log_state
 from player import Player
 
 
@@ -33,7 +35,7 @@ def main():
     # Initialize a player ship
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
-    _ = Player(x, y)
+    player = Player(x, y)
 
     # Clock object for setting fps
     clock = pygame.time.Clock()
@@ -50,10 +52,17 @@ def main():
         # Hook the update method in the game with group
         updatable.update(dt)
 
+        # Detected collision between player ship and asteroids
+        for asteroid in asteroids:  # pyright: ignore[reportUnknownVariableType]
+            if asteroid.collides_with(player):  # pyright: ignore[reportUnknownMemberType]
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
+
         # Draw a player ship within drawable group
         # after filling the screen with black
         # but before filpping the screen
-        # spaceship.draw(screen)
+        # player.draw(screen)
         for obj in drawable:  # pyright: ignore[reportUnknownVariableType]
             obj.draw(screen)  # pyright: ignore[reportUnknownMemberType]
 
