@@ -7,6 +7,7 @@ from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from logger import log_event, log_state
 from player import Player
+from shot import Shot
 
 
 def main():
@@ -22,6 +23,7 @@ def main():
     drawable = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
     # Add group to manage asteroids
     asteroids = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
+    shots = pygame.sprite.Group()  # pyright: ignore[reportUnknownVariableType]
 
     # Set containers for Asteroid
     Asteroid.containers = (asteroids, updatable, drawable)
@@ -36,6 +38,9 @@ def main():
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
     player = Player(x, y)
+
+    # Set containers for Shot
+    Shot.containers = (shots, updatable, drawable)
 
     # Clock object for setting fps
     clock = pygame.time.Clock()
