@@ -57,12 +57,19 @@ def main():
         # Hook the update method in the game with group
         updatable.update(dt)
 
-        # Detected collision between player ship and asteroids
         for asteroid in asteroids:  # pyright: ignore[reportUnknownVariableType]
+            # Detect collision between player ship and asteroids
             if asteroid.collides_with(player):  # pyright: ignore[reportUnknownMemberType]
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+
+            # Detect collision between asteroid and shots
+            for shot in shots:  # pyright: ignore[reportUnknownVariableType]
+                if shot.collides_with(asteroid):  # pyright: ignore[reportUnknownMemberType]
+                    log_event("asteroid_shot")
+                    shot.kill()  # pyright: ignore[reportUnknownMemberType]
+                    asteroid.kill()  # pyright: ignore[reportUnknownMemberType]
 
         # Draw a player ship within drawable group
         # after filling the screen with black
