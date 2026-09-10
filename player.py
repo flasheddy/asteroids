@@ -6,6 +6,7 @@ from circleshape import CircleShape
 from constants import (
     LINE_WIDTH,
     PLAYER_RADIUS,
+    PLAYER_SHOOT_COOLDOWN_SECONDS,
     PLAYER_SHOOT_SPEED,
     PLAYER_SPEED,
     PLAYER_TURN_SPEED,
@@ -17,6 +18,7 @@ class Player(CircleShape):
     def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0  # pyright: ignore[reportUnannotatedClassAttribute]
+        self.shot_cooldown_timer = 0.0  # pyright: ignore[reportUnannotatedClassAttribute]
 
     # in the Player class
     def triangle(self) -> list[pygame.Vector2]:
@@ -51,6 +53,10 @@ class Player(CircleShape):
 
     # Make shooting
     def shoot(self) -> None:
+        # Rate limit
+        if self.shot_cooldown_timer > 0:
+            return
+        self.shot_cooldown_timer = PLAYER_SHOOT_COOLDOWN_SECONDS
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         
@@ -59,6 +65,8 @@ class Player(CircleShape):
     # Bind keys with rotation and movement
     @override
     def update(self, dt: float) -> None:
+        # Rate limit
+        self.shot_cooldown_timer -= dt
         keys = pygame.key.get_pressed()
 
         # Rotation keys
