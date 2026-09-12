@@ -69,7 +69,7 @@ def main():
                 if shot.collides_with(asteroid):  # pyright: ignore[reportUnknownMemberType]
                     log_event("asteroid_shot")
                     shot.kill()  # pyright: ignore[reportUnknownMemberType]
-                    asteroid.kill()  # pyright: ignore[reportUnknownMemberType]
+                    asteroid.split()  # pyright: ignore[reportUnknownMemberType]
 
         # Draw a player ship within drawable group
         # after filling the screen with black
